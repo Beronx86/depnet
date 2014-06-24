@@ -8,14 +8,17 @@
 #include <vector>
 #include "gibbs_sampler.h"
 
-namespace depnet {
-
+namespace depnet 
+{
     /**
      * An forward-traversal iterator over samples produced by Gibbs sampling
      */
     class GibbsIterator
-        : public boost::iterator_facade<GibbsIterator, 
-            SampleType, boost::forward_traversal_tag >
+        : public boost::iterator_facade<
+            GibbsIterator, 
+            SampleType, 
+            boost::forward_traversal_tag,
+            SampleType>
     {
      public:
         /** 
@@ -27,6 +30,9 @@ namespace depnet {
          * Accounts for autocorrelation effects
          */
         explicit GibbsIterator(std::shared_ptr<GibbsSampler> sampler, int warmUp = 0, int interval = 0);
+
+        /** Destroys the Gibbs iterator */
+        ~GibbsIterator();
 
      private:
         friend class boost::iterator_core_access;
@@ -45,8 +51,11 @@ namespace depnet {
         /** The sampler to use when retrieving samples */
         std::shared_ptr<GibbsSampler> sampler;
         
-        /** The number of samples that have been retrieved from the sampler, excluding */
+        /** The number of samples that have been retrieved from the sampler, excluding warm up & autocorrelation. */
         long numSamples;
+
+        /** The number of samples retrieved, including warm up and autocorrelation */
+        long totalSamples;
 
         /** The number of samples to discard before returning a sample */
         int warmUp;
@@ -58,7 +67,7 @@ namespace depnet {
          * Retrieves the sample at the current position
          * @return The most recent valid sample produced by the sampler
          */
-        SampleType & dereference() const;
+        SampleType const dereference() const;
 
         /** The current sample */
         SampleType sample;

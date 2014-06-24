@@ -4,12 +4,18 @@
 #ifndef VARIABLE_SPECIFICATION_H
 #define VARIABLE_SPECIFICATION_H
 
+#include<string>
+#include<vector>
+#include<map>
+
 namespace depnet {
 
     /**
-     * Contains metadata about a variable
+     * Contains metadata about a variable which is used to determine how best 
+     * the variable should be encoded and used for training.
      */
-    class VariableSpecification {
+    class VariableSpecification 
+    {
     public:
 
         /**
@@ -26,7 +32,7 @@ namespace depnet {
          * Retrieves the name of this variable
          * @return The name/label of the variable
          */ 
-        std::string getName();
+        std::string getName() const;
 
         /**
          * Establishes or overwrites this variable's name.
@@ -64,14 +70,14 @@ namespace depnet {
         bool isDiscrete() const;
 
         /**
-         * Marks this variable as discrete or continuous. Ensure that ::setLevels has been called to 
+         * Marks this variable as discrete or continuous. Ensure that VariableSpecification::setLevels has been called to 
          * establish the names of the discrete variables when marking as discrete.
          * @param isDiscrete Indicates if this variable is discrete
          */
         void setDiscrete(bool isDiscrete);
 
         /**
-         * Indicates if this is an ordinal variable
+         * Indicates if this is an ordinal variable (e.g. with ordered levels 1-10, 10-20, 20-30).
          * @return True if this variable has been configured as ordinal, false otherwise
          */
         bool isOrdinal() const;
@@ -85,7 +91,7 @@ namespace depnet {
 
         /**
          * Gets a value indicating if this variable 
-         * is configured as a Boolean
+         * is configured as a Boolean indicator.
          * @return Returns true if this variable has been 
          * configured as Boolean, false otherwise
          */
@@ -103,20 +109,26 @@ namespace depnet {
          * @return A mapping from a positive integer factor ID to the 
          * name of the level of that factor.
          */
-        std::map<int, std::string> getLevelMap() const;
+        const std::map<int, std::string> getLevelMap() const;
 
         /**
          * Retrieves the names of the levels for a discrete variable
          * @return The names of the levels as a string, 
          * or an empty vector if this is not a discrete variable
          */
-        std::vector<std::string> getLevels() const;
+        const std::vector<std::string>& getLevels() const;
+
+        /**
+         * Retrieves the number of levels established for this discrete variable
+         * @return The names of variable levels as a string
+         */
+        const int getNumLevels() const;
 
         /**
          * Stores the names of the levels of this variable.
          * Calling this method will set this variable as discrete.
          * If the levels represent ordinal values, they should be 
-         * supplied in order and ::setOrdinal should be called.
+         * supplied in order and VariableSpecification::setOrdinal should be called.
          * @param levels The names of the levels as strings
          */
         void setLevels(std::vector<std::string> levels);
@@ -132,13 +144,13 @@ namespace depnet {
         double maxVal;
 
         /** Indicates if this is a boolean variable */
-        bool isBoolean;
+        bool isBool;
 
         /** Indicates if this is an ordinal variable */
-        bool isOrdinal;
+        bool isOrd;
 
         /** Indicates if this is a discrete variable */
-        bool isDiscrete;
+        bool isDisc;
 
         /** Names of variable values for a discrete variable */
         std::vector<std::string> levels;
