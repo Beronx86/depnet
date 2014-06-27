@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# Code::Blocks project files
+*.cbp
+
 # Compiled Dynamic libraries
 *.so
 *.dylib

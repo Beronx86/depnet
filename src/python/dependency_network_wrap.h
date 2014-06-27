@@ -43,6 +43,14 @@ namespace depnet
          * @param samples Instantiations of all variables to use when learning conditional models
          */
         void train(const boost::python::list& samples);
+    private:
+        /**
+         * Converts a 2-dimensional list of samples from Python's 
+         * representation to the internal numeric-only representation
+         * @param samples The samples to convert from the Pythonic representation
+         * @param cSamples The array to be populated with the samples
+         */
+        void convertData(const boost::python::list& samples, boost::multi_array<double, 2>& cSamples);
     };
 
 }
