@@ -1,6 +1,8 @@
 
 #include "dependency_network.h"
 #include "var_spec.h"
+#include "factory.h"
+#include "standard_factory.h"
 
 #include<memory>
 #include<vector>
@@ -12,12 +14,13 @@
 int main(int argc, char** argv)
 {
     std::vector<std::shared_ptr<depnet::VariableSpecification> > varSpecs;
+    std::shared_ptr<depnet::Factory> factory(new depnet::StandardFactory());
 
-    auto xVar = std::shared_ptr<depnet::VariableSpecification>(new depnet::VariableSpecification());
+    auto xVar = factory->createVariableSpec();
     xVar->setName("x");
     varSpecs.push_back(xVar);
 
-    auto yVar = std::shared_ptr<depnet::VariableSpecification>(new depnet::VariableSpecification());
+    auto yVar = factory->createVariableSpec();
     yVar->setName("y");
     varSpecs.push_back(yVar);
 

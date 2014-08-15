@@ -26,7 +26,7 @@ namespace depnet
         const boost::python::list& samples, boost::multi_array<double, 2>& cSamples)
     {
         for(boost::python::ssize_t recordIndex = 0; 
-                i < boost::python::len(samples); i++) 
+                recordIndex < boost::python::len(samples); recordIndex++) 
         {
             // make sure this is a 2-d array of lists
             boost::python::extract<boost::python::list> listExtractor(samples[recordIndex]);

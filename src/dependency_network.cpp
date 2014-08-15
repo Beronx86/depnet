@@ -1,6 +1,6 @@
 
 #include "dependency_network.h"
-#include "rdf_model.h"
+#include "models/rdf_model.h"
 
 #include<iostream>
 
@@ -9,8 +9,9 @@ namespace depnet
     DependencyNetwork::DependencyNetwork() { }
 
     DependencyNetwork::DependencyNetwork(
-        const std::vector<std::shared_ptr<VariableSpecification> >& varSpecs) :
-        varSpecs(varSpecs)
+        const std::vector<std::shared_ptr<VariableSpecification> >& varSpecs,
+            std::shared_ptr<Factory> factory) :
+        varSpecs(varSpecs), factory(factory)
     {
     }
 
@@ -31,7 +32,7 @@ namespace depnet
         for(unsigned int i = 0; i < numSamples; i++)
         {
             (*this->gibbsIterator)++;
-            auto sampleMap = **this->gibbsIterator;
+            SampleType sampleMap = *(*this->gibbsIterator);
 
             unsigned int featureCtr = 0;
             for(auto varSpec = this->varSpecs.begin(); varSpec != this->varSpecs.end(); ++varSpec)
@@ -75,10 +76,8 @@ namespace depnet
             depColumn++;
         }
 
-        std::cout << "Creating sampler" << std::endl;
-        std::shared_ptr<GibbsSampler> sampler(new GibbsSampler(this->models, 10));
-        std::cout << "Creating iterator" << std::endl;
-        this->gibbsIterator = std::shared_ptr<GibbsIterator>(new GibbsIterator(sampler, 500, 100));
+        std::shared_ptr<GibbsSampler> sampler = this->factory->createSampler(this->models, 10);
+        this->gibbsIterator = this->factory->createSampleIterator(sampler, 500, 100);
     }
 
 }

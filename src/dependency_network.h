@@ -8,7 +8,9 @@
 #include<memory>
 
 #include "var_spec.h"
-#include "gibbs_iterator.h"
+#include "mcmc/gibbs_iterator.h"
+#include "factory.h"
+#include "standard_factory.h"
 
 namespace depnet 
 {
@@ -27,7 +29,8 @@ namespace depnet
          * @param varSpecs Specifications for variables to be modeled by the network. 
          * The variables should be supplied in the same order as they will be during training.
          */
-        DependencyNetwork(const std::vector<std::shared_ptr<VariableSpecification> >& varSpecs);
+        DependencyNetwork(const std::vector<std::shared_ptr<VariableSpecification> >& varSpecs,
+            std::shared_ptr<Factory> factory = std::shared_ptr<Factory>(new StandardFactory()));
 
         /**
          * Destroys the dependency network
@@ -76,6 +79,9 @@ namespace depnet
         std::vector<std::shared_ptr<VariableSpecification> > varSpecs;
     private:
 
+        /** Used for object construction */
+        std::shared_ptr<Factory> factory;
+    
         /** An iterator over Gibbs samples */
         std::shared_ptr<GibbsIterator> gibbsIterator;
 

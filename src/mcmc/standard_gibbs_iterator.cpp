@@ -1,20 +1,20 @@
 
-#include "gibbs_iterator.h"
+#include "standard_gibbs_iterator.h"
 
 namespace depnet
 {
 
-    GibbsIterator::GibbsIterator(std::shared_ptr<GibbsSampler> sampler, 
+    StandardGibbsIterator::StandardGibbsIterator(std::shared_ptr<GibbsSampler> sampler, 
         int warmUp, int interval) : sampler(sampler), numSamples(0), totalSamples(0), 
                     warmUp(warmUp), autoCorrInterval(interval)
     {
     }
 
-    GibbsIterator::~GibbsIterator()
+    StandardGibbsIterator::~StandardGibbsIterator()
     {
     }
 
-    void GibbsIterator::increment()
+    void StandardGibbsIterator::increment()
     {
         while(totalSamples < warmUp)
         {
@@ -33,7 +33,7 @@ namespace depnet
             std::cout << sampleIt->first->getName() << "=" << sampleIt->second << std::endl;
     }
 
-    SampleType const GibbsIterator::dereference() const
+    SampleType const StandardGibbsIterator::dereference() const
     {
         return this->sample;
     }

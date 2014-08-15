@@ -1,12 +1,12 @@
 
-#include "gibbs_sampler.h"
+#include "standard_gibbs_sampler.h"
 #include<random>
 #include<iostream>
 #include<limits>
 
 namespace depnet
 {
-    GibbsSampler::GibbsSampler(const std::map<std::shared_ptr<VariableSpecification>, 
+    StandardGibbsSampler::StandardGibbsSampler(const std::map<std::shared_ptr<VariableSpecification>, 
                             std::shared_ptr<ConditionalModel> >& network,
             unsigned int numChains,
             boost::optional<const std::map<std::shared_ptr<VariableSpecification>, double> > evidence,
@@ -53,17 +53,17 @@ namespace depnet
         }
     }
 
-    std::vector<std::shared_ptr<VariableSpecification> > const& GibbsSampler::getSampleOrder() const
+    std::vector<std::shared_ptr<VariableSpecification> > const& StandardGibbsSampler::getSampleOrder() const
     {
         return this->sampleOrder;
     }
 
-    void GibbsSampler::setSampleOrder(std::vector<std::shared_ptr<VariableSpecification> > sampleOrder)
+    void StandardGibbsSampler::setSampleOrder(std::vector<std::shared_ptr<VariableSpecification> > sampleOrder)
     {
         this->sampleOrder = std::move(sampleOrder);
     }
 
-    SampleType GibbsSampler::sample()
+    SampleType StandardGibbsSampler::sample()
     {
         SampleType curChainSample = this->currentSamples[this->currentChain];
         for(auto varIt = sampleOrder.begin(); varIt != sampleOrder.end(); ++varIt)

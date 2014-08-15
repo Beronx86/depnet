@@ -1,21 +1,22 @@
 
 #pragma once
 
-#ifndef GIBBS_ITERATOR_H
-#define GIBBS_ITERATOR_H
+#ifndef STANDARD_GIBBS_ITERATOR_H
+#define STANDARD_GIBBS_ITERATOR_H
 
 #include <boost/iterator/iterator_facade.hpp>
 #include <vector>
 #include "gibbs_sampler.h"
+#include "gibbs_iterator.h"
 
 namespace depnet 
 {
     /**
      * An forward-traversal iterator over samples produced by Gibbs sampling
      */
-    class GibbsIterator
-        : public boost::iterator_facade<
-            GibbsIterator, 
+    class StandardGibbsIterator
+        : public GibbsIterator, public boost::iterator_facade<
+            std::shared_ptr<StandardGibbsIterator>, 
             SampleType, 
             boost::forward_traversal_tag,
             SampleType>
@@ -29,10 +30,10 @@ namespace depnet
          * @param interval A number of samples to discard between each sample that is returned.
          * Accounts for autocorrelation effects
          */
-        explicit GibbsIterator(std::shared_ptr<GibbsSampler> sampler, int warmUp = 0, int interval = 0);
+        explicit StandardGibbsIterator(std::shared_ptr<GibbsSampler> sampler, int warmUp = 0, int interval = 0);
 
         /** Destroys the Gibbs iterator */
-        ~GibbsIterator();
+        ~StandardGibbsIterator();
 
      private:
         friend class boost::iterator_core_access;
@@ -46,7 +47,7 @@ namespace depnet
          * same sampler, warm up period, interval, and current sample 
          * @param other The iterator to compare this to
          */
-        bool equal(GibbsIterator const& other) const;
+        bool equal(StandardGibbsIterator const& other) const;
 
         /** The sampler to use when retrieving samples */
         std::shared_ptr<GibbsSampler> sampler;

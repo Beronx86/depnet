@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 2.8)
 find_package(PythonLibs REQUIRED)
 include_directories (${PYTHON_INCLUDE_DIRS})
 
-find_package(Boost 1.55.0 COMPONENTS python)
+find_package(Boost 1.55.0 COMPONENTS python unit_test_framework REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS} src)
 message("Python include dirs: " ${PYTHON_INCLUDE_DIRS} )
 message("Python libraries: " ${PYTHON_LIBRARIES} )
@@ -15,14 +15,17 @@ message("Boost include dirs: " ${Boost_INCLUDE_DIRS} )
 message("Boost libraries: " ${Boost_LIBRARIES} )
 
 
-file(GLOB DEPNET_SOURCES src/*.cpp)
-file(GLOB DEPNET_HEADERS src/*.h)
+file(GLOB DEPNET_SOURCES src/*.cpp src/models/*.cpp src/exceptions/*.h)
+file(GLOB DEPNET_HEADERS src/*.h src/models/*.h src/exceptions/*.h)
 
 file(GLOB ALGLIB_SOURCES src/alglib/*.cpp)
 file(GLOB ALGLIB_HEADERS src/alglib/*.h)
 
 file(GLOB PYDEPNET_SOURCES src/python/*.cpp)
 file(GLOB PYDEPNET_HEADERS src/python/*.h)
+
+file(GLOB_RECURSE TEST_SOURCES src/*.cpp)
+file(GLOB_RECURSE TEST_HEADERS src/*.h)
 
 add_library (
     depnet SHARED 
@@ -39,6 +42,14 @@ add_library(
     ${PYDEPNET_SOURCES}
     ${PYDEPNET_HEADERS}
     ${ALGLIB_SOURCES}
+    ${ALGLIB_HEADERS}
+)
+
+add_executable(depnet_test
+    ${TEST_SOURCES}
+    ${TEST_HEADERS}
+    ${DEPNET_HEADERS}
+    ${PYDEPNET_HEADERS}
     ${ALGLIB_HEADERS}
 )
 
@@ -59,6 +70,12 @@ target_link_libraries (depnet
 )
 
 target_link_libraries(pydepnet
+    ${PYTHON_LIBRARIES}
+    ${Boost_LIBRARIES}
+)
+
+target_link_libraries(depnet_test
+    depnet
     ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
 )

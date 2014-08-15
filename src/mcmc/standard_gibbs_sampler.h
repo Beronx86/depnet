@@ -1,11 +1,12 @@
 
 #pragma once
 
-#ifndef GIBBS_SAMPLER_H
-#define GIBBS_SAMPLER_H
+#ifndef STANDARD_GIBBS_SAMPLER_H
+#define STANDARD_GIBBS_SAMPLER_H
 
 #include "var_spec.h"
-#include "conditional_model.h"
+#include "models/conditional_model.h"
+#include "gibbs_sampler.h"
 
 #include<memory>
 #include<vector>
@@ -15,12 +16,11 @@
 namespace depnet 
 {
 
-    typedef std::shared_ptr<std::map<std::shared_ptr<VariableSpecification>, double> > SampleType;
 
     /**
      * Performs Gibbs sampler over a set of local conditional models
      */
-    class GibbsSampler 
+    class StandardGibbsSampler : public GibbsSampler
     {
     public: 
         /**
@@ -33,7 +33,7 @@ namespace depnet
          * Supplying reasonable initial samples is recommended when the data involves 
          * unbounded (hasRange() is false) VariableSpecification instances
          */
-        GibbsSampler(const std::map<std::shared_ptr<VariableSpecification>, 
+        StandardGibbsSampler(const std::map<std::shared_ptr<VariableSpecification>, 
                                 std::shared_ptr<ConditionalModel> >& network,
                 unsigned int numChains,
                 boost::optional<const std::map<std::shared_ptr<VariableSpecification>, double> > evidence =
