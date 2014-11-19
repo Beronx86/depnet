@@ -31,10 +31,13 @@ namespace depnet
                 boost::extents[numSamples][this->varSpecs.size()]));
         for(unsigned int i = 0; i < numSamples; i++)
         {
+            std::cout << "Advancing iterator" << std::endl;
             (*this->gibbsIterator)++;
+            std::cout << "Getting a sample" << std::endl;
             SampleType sampleMap = *(*this->gibbsIterator);
 
             unsigned int featureCtr = 0;
+            std::cout << "Assigning sampled values to variables" << std::endl;
             for(auto varSpec = this->varSpecs.begin(); varSpec != this->varSpecs.end(); ++varSpec)
             {
                 (*result)[i][featureCtr] = (*sampleMap)[*varSpec];
